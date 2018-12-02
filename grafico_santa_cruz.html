@@ -314,15 +314,28 @@
     ];
 
     db.collection("data").doc("info")
-        .onSnapshot(function (doc) {
-          console.log("Current data: ", doc.data().count);
-          let result = validate(doc.data().count)
-          setInterval(() => {
-            mapaCalor()
-          }, 5000)
-        });
+      .onSnapshot(function (doc) {
+        console.log("Current data: ", doc.data().count);
+        let result = validate(doc.data().count)
+        setInterval(() => {
+          for (let camara of _camaras) {
+            // Add the circle for this city to the map.
+            let cityCircle = new google.maps.Circle({
+              strokeColor: result.color,
+              strokeOpacity: 0.8,
+              strokeWeight: 2,
+              fillColor: result.color,
+              fillOpacity: 0.35,
+              map: map,
+              center: camara.loc,
+              radius: Math.sqrt(result.radio) * 100
+            });
+          }
+        }, 5000)
+      });
 
     var map
+
     function initMap() {
       //Creando mapa
       map = new google.maps.Map(document.getElementById('map'), {
@@ -333,196 +346,180 @@
         },
         //mapTypeId: 'satellite'
       });
-      for (let camara of _camaras) {
-        // Add the circle for this city to the map.
-        let cityCircle = new google.maps.Circle({
-          strokeColor: "rgba(225,0,0,0.5)",
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: '#FF0000',
-          fillOpacity: 0.35,
+
+
+
+      // Marcar las ubicaciones de las camaras con cordenadas
+      for (camara of _camaras) {
+        let marker = new google.maps.Marker({
           map: map,
-          center: camara.loc,
-          radius: Math.sqrt(camara.population) * 100
-        });
-        db.collection("data").doc("info")
-          .onSnapshot(function (doc) {
-            console.log("Current data: ", doc.data().count);
-            _CAM1 = doc.data().count
-          });
-
-
-        // Marcar las ubicaciones de las camaras con cordenadas
-        for (camara of _camaras) {
-          let marker = new google.maps.Marker({
-            map: map,
-            position: new google.maps.LatLng(camara.location[0], camara.location[1]),
-            title: camara.name
-          })
-        }
-      }
-      
-
-
-
-
-
-
-      function toggleHeatmap() {
-        heatmap.setMap(heatmap.getMap() ? null : map);
-      }
-
-      function changeGradient() {
-        var gradient = [
-          'rgba(0, 255, 255, 0)',
-          'rgba(0, 255, 255, 1)',
-          'rgba(0, 191, 255, 1)',
-          'rgba(0, 127, 255, 1)',
-          'rgba(0, 63, 255, 1)',
-          'rgba(0, 0, 255, 1)',
-          'rgba(0, 0, 223, 1)',
-          'rgba(0, 0, 191, 1)',
-          'rgba(0, 0, 159, 1)',
-          'rgba(0, 0, 127, 1)',
-          'rgba(63, 0, 91, 1)',
-          'rgba(127, 0, 63, 1)',
-          'rgba(191, 0, 31, 1)',
-          'rgba(255, 0, 0, 1)'
-        ]
-        heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
-      }
-
-      function changeRadius() {
-        heatmap.set('radius', heatmap.get('radius') ? null : 30);
-      }
-
-      function changeOpacity() {
-        heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
-      }
-
-      // Datos de los puntos de datos
-      function getPoints() {
-        return [{ // camara 1
-            location: new google.maps.LatLng(-17.797752, -63.192382),
-            weight: _CAM1
-          },
-          {
-            location: new google.maps.LatLng(-17.797389, -63.191963),
-            weight: _CAM1
-          },
-          {
-            location: new google.maps.LatLng(-17.797026, -63.191544),
-            weight: _CAM1
-          },
-          {
-            location: new google.maps.LatLng(-17.796663, -63.191125),
-            weight: _CAM1
-          },
-          {
-            location: new google.maps.LatLng(-17.798115, -63.192801),
-            weight: _CAM1
-          },
-          {
-            location: new google.maps.LatLng(-17.798478, -63.193220),
-            weight: _CAM1
-          },
-          {
-            location: new google.maps.LatLng(-17.798841, -63.193639),
-            weight: _CAM1
-          },
-
-
-
-
-          { // Camara 8
-            location: new google.maps.LatLng(-17.798365, -63.193055),
-            weight: _CAM8
-          },
-          {
-            location: new google.maps.LatLng(-17.798002, -63.192636),
-            weight: _CAM8
-          },
-          {
-            location: new google.maps.LatLng(-17.797639, -63.192217),
-            weight: _CAM8
-          },
-          {
-            location: new google.maps.LatLng(-17.797276, -63.191798),
-            weight: _CAM8
-          },
-          {
-            location: new google.maps.LatLng(-17.798728, -63.193474),
-            weight: _CAM8
-          },
-          {
-            location: new google.maps.LatLng(-17.799091, -63.193893),
-            weight: _CAM8
-          },
-          {
-            location: new google.maps.LatLng(-17.799454, -63.194312),
-            weight: _CAM8
-          },
-
-
-          { //camara 2
-            location: new google.maps.LatLng(-17.786870, -63.186396),
-            weight: _CAM2
-          },
-          {
-            location: new google.maps.LatLng(-17.787000, -63.186500),
-            weight: _CAM2
-          },
-          {
-            location: new google.maps.LatLng(-17.787130, -63.186604),
-            weight: _CAM2
-          },
-          {
-            location: new google.maps.LatLng(-17.787260, -63.186708),
-            weight: _CAM2
-          },
-          {
-            location: new google.maps.LatLng(-17.786740, -63.186292),
-            weight: _CAM2
-          },
-          {
-            location: new google.maps.LatLng(-17.786610, -63.186188),
-            weight: _CAM2
-          },
-          {
-            location: new google.maps.LatLng(-17786480, -63.186084),
-            weight: _CAM2
-          },
-
-
-
-
-
-          // {
-          //   location: new google.maps.LatLng(-17.798702, -63.193196),
-          //   weight: 1
-          // },
-          // {
-          //   location: new google.maps.LatLng(-17.765923, -63.169284),
-          //   weight: 2
-          // }
-        ]
-
+          position: new google.maps.LatLng(camara.location[0], camara.location[1]),
+          title: camara.name
+        })
       }
     }
 
-    function validate(dato){
-      if (dato<=100) {
-        return{
+
+
+
+
+
+
+    function toggleHeatmap() {
+      heatmap.setMap(heatmap.getMap() ? null : map);
+    }
+
+    function changeGradient() {
+      var gradient = [
+        'rgba(0, 255, 255, 0)',
+        'rgba(0, 255, 255, 1)',
+        'rgba(0, 191, 255, 1)',
+        'rgba(0, 127, 255, 1)',
+        'rgba(0, 63, 255, 1)',
+        'rgba(0, 0, 255, 1)',
+        'rgba(0, 0, 223, 1)',
+        'rgba(0, 0, 191, 1)',
+        'rgba(0, 0, 159, 1)',
+        'rgba(0, 0, 127, 1)',
+        'rgba(63, 0, 91, 1)',
+        'rgba(127, 0, 63, 1)',
+        'rgba(191, 0, 31, 1)',
+        'rgba(255, 0, 0, 1)'
+      ]
+      heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+    }
+
+    function changeRadius() {
+      heatmap.set('radius', heatmap.get('radius') ? null : 30);
+    }
+
+    function changeOpacity() {
+      heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+    }
+
+    // Datos de los puntos de datos
+    function getPoints() {
+      return [{ // camara 1
+          location: new google.maps.LatLng(-17.797752, -63.192382),
+          weight: _CAM1
+        },
+        {
+          location: new google.maps.LatLng(-17.797389, -63.191963),
+          weight: _CAM1
+        },
+        {
+          location: new google.maps.LatLng(-17.797026, -63.191544),
+          weight: _CAM1
+        },
+        {
+          location: new google.maps.LatLng(-17.796663, -63.191125),
+          weight: _CAM1
+        },
+        {
+          location: new google.maps.LatLng(-17.798115, -63.192801),
+          weight: _CAM1
+        },
+        {
+          location: new google.maps.LatLng(-17.798478, -63.193220),
+          weight: _CAM1
+        },
+        {
+          location: new google.maps.LatLng(-17.798841, -63.193639),
+          weight: _CAM1
+        },
+
+
+
+
+        { // Camara 8
+          location: new google.maps.LatLng(-17.798365, -63.193055),
+          weight: _CAM8
+        },
+        {
+          location: new google.maps.LatLng(-17.798002, -63.192636),
+          weight: _CAM8
+        },
+        {
+          location: new google.maps.LatLng(-17.797639, -63.192217),
+          weight: _CAM8
+        },
+        {
+          location: new google.maps.LatLng(-17.797276, -63.191798),
+          weight: _CAM8
+        },
+        {
+          location: new google.maps.LatLng(-17.798728, -63.193474),
+          weight: _CAM8
+        },
+        {
+          location: new google.maps.LatLng(-17.799091, -63.193893),
+          weight: _CAM8
+        },
+        {
+          location: new google.maps.LatLng(-17.799454, -63.194312),
+          weight: _CAM8
+        },
+
+
+        { //camara 2
+          location: new google.maps.LatLng(-17.786870, -63.186396),
+          weight: _CAM2
+        },
+        {
+          location: new google.maps.LatLng(-17.787000, -63.186500),
+          weight: _CAM2
+        },
+        {
+          location: new google.maps.LatLng(-17.787130, -63.186604),
+          weight: _CAM2
+        },
+        {
+          location: new google.maps.LatLng(-17.787260, -63.186708),
+          weight: _CAM2
+        },
+        {
+          location: new google.maps.LatLng(-17.786740, -63.186292),
+          weight: _CAM2
+        },
+        {
+          location: new google.maps.LatLng(-17.786610, -63.186188),
+          weight: _CAM2
+        },
+        {
+          location: new google.maps.LatLng(-17786480, -63.186084),
+          weight: _CAM2
+        },
+
+
+
+
+
+        // {
+        //   location: new google.maps.LatLng(-17.798702, -63.193196),
+        //   weight: 1
+        // },
+        // {
+        //   location: new google.maps.LatLng(-17.765923, -63.169284),
+        //   weight: 2
+        // }
+      ]
+
+    }
+    
+
+    function validate(dato) {
+      if (dato <= 100) {
+        return {
           color: "rgba(246, 238, 9, 0.53)",
           radio: 2
         }
-      }else if(dato<=200){
-        return{
-          color: "rgba(246, 238, 9, 0.53)",
+      } else if (dato <= 200) {
+        return {
+          color: "rgba(246, 238, 9, 0.78)",
           radio: 4
         }
-      }else{
-        return{
+      } else {
+        return {
           color: "rgba(225,0,0,0.5)",
           radio: 6
         }
