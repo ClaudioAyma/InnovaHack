@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.teal-green.min.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+crossorigin="anonymous">
+   <title>Innova Hack</title>
+  </head>
+
+  <body>
+
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Titulo de la barra de navegacions -->
+      <span class="mdl-layout-title">Innova Hack - Santa Cruz</span>
+      <div class="mdl-layout-spacer"></div>
+
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Innova Hack - Santa Cruz</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="">Inicio</a>
+      <a class="mdl-navigation__link" href="">Estadísticas</a>
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    <div class="page-content">
+    <script>
+    // Get a reference to the database service
+var database = firebase.database();
+
+
+
+// funcion para leer todos los usuarios 
+function readUserData() {
+  var users = firebase.database().ref('camaras/');
+
+  // la funcion ON se queda escuchando si existe algun cambio
+  // en alguno de ellos.
+  users.on('value', function (snapshot) {
+    // llamado a la funcion dibujar
+    refreshUI(snapshot.val());
+  });
+}
+
+// Funcion que pinta/dibuja los usuarios en una tabla
+function refreshUI(users) {
+  var tBody = '';
+  Object.keys(users).forEach(function (key) {
+    var tRow =
+      `
+      <tr>
+        <th scope="row">${key}</th>
+        <td>${camaras[key].id}</td>
+        <td>${camaras[key].hora}</td>
+        <td>${camaras[key].cvehiculos}</td>
+      </tr>
+    `;
+    tBody += tRow;
+  });
+
+  // tBody debe ser agregado al html
+  document.getElementById('usersList').innerHTML = tBody;
+};
+
+
+
+
+    </script>
+
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Hora</th>
+        <th scope="col">Cantidad Vehiculos</th>
+      </tr>
+    </thead>
+    <tbody id="usersList">
+     
+    </tbody>
+  </table>
+
+    </div>
+  </main>
+</div>
+  </body>
+
+  <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyBDKVLILtp4BEF2v9FvRQ2wn4rTmLNHGTs",
+      authDomain: "innovahacks.firebaseapp.com",
+      databaseURL: "https://innovahacks.firebaseio.com",
+      storageBucket: "bucket.appspot.com"
+    };
+    firebase.initializeApp(config);
+  </script>
+  
+</html>
