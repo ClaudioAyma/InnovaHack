@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Heatmaps</title>
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+    #map {
+      height: 100%;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    #floating-panel {
+      position: absolute;
+      top: 10px;
+      left: 25%;
+      z-index: 5;
+      background-color: #fff;
+      padding: 5px;
+      border: 1px solid #999;
+      text-align: center;
+      font-family: 'Roboto', 'sans-serif';
+      line-height: 30px;
+      padding-left: 10px;
+    }
+
+    #floating-panel {
+      background-color: #fff;
+      border: 1px solid #999;
+      left: 25%;
+      padding: 5px;
+      position: absolute;
+      top: 10px;
+      z-index: 5;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="floating-panel">
+    <button onclick="toggleHeatmap()">Toggle Heatmap</button>
+    <button onclick="changeGradient()">Change gradient</button>
+    <button onclick="changeRadius()">Change radius</button>
+    <button onclick="changeOpacity()">Change opacity</button>
+  </div>
+  <div id="map"></div>
+  <script>
+    // This example requires the Visualization library. Include the libraries=visualization
+    // parameter when you first load the API. For example:
+    // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization">
+
+    var map, heatmap;
+    // Inicializar mapas
+    function initMap() {
+      //Creando mapa
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 14,
+        center: {
+          lat: 37.774546, 
+          lng: -122.433523
+        },
+        mapTypeId: 'satellite'
+      });
+
+      //Visualizando datos que retorna getpoints
+      heatmap = new google.maps.visualization.HeatmapLayer({
+        data: getPoints(),
+        map: map
+      });
+
+      // Marcar las ubicaciones de las camaras con cordenadas
+      for (camara of getCamaras()) {
+        let marker = new google.maps.Marker({
+          map: map,
+          position: new google.maps.LatLng(camara.location[0], camara.location[1]),
+          title: camara.name
+        })
+      }
+    }
+
+    //  Ubicacion de las camaras almacenadas en lista camaras
+    function getCamaras() {
+      const markers = [{
+          id: "1",
+          name: "1er Anillo Av. Grigota",
+          location: [-17.798611, -63.193137]
+        },
+        {
+          id: "2",
+          name: "1er Anillo Isabela Catolica",
+          location: [-17.786937, -63.186396]
+        },
+        {
+          id: "3",
+          name: "1er y 2do Anillo Av. Grigota entre C/ Muchiri Comercial La Ramada",
+          location: [-17.798702, -63.193196]
+        },
+        {
+          id: "4",
+          name: "2do Anillo Av. Alemana",
+          location: [-17.765923, -63.169284]
+        },
+        {
+          id: "5",
+          name: "2do Anillo Av Paragua",
+          location: [-17.770987, -63.156944]
+        },
+        {
+          id: "6",
+          name: "2 Anillo Av. Cristo Redentor",
+          location: [-17.726056, -63.165863]
+        },
+        {
+          id: "7",
+          name: "2do Anillo Av. Cristo Redentor 2",
+          location: [-17.714787, -63.161407]
+        },
+        {
+          id: "8",
+          name: "2do Anillo Av. Grigota",
+          location: [-17.798695, -63.193181]
+        },
+        {
+          id: "9",
+          name: "2do Anillo Av. Grigota 2",
+          location: [-17.803976, -63.199216]
+        },
+        {
+          id: "10",
+          name: "2do Anillo Av. Roca y Coronado",
+          location: [-17.785602, -63.211362]
+        },
+        {
+          id: "11",
+          name: "2do Anillo Av. Escuadron Velazco",
+          location: [-17.807528, -63.198416]
+        },
+        {
+          id: "12",
+          name: "3er Anillo Interno Av. Banzer",
+          location: [-17.739385, -63.171427]
+        },
+        {
+          id: "13",
+          name: "3er Anillo Interno Av. Pirai",
+          location: [-17.792114, -63.199133]
+        },
+        {
+          id: "14",
+          name: "4to Anillo Av. San Martin",
+          location: [-17.769123, -63.192997]
+        },
+        {
+          id: "15",
+          name: "4to Anillo Av. Banzer",
+          location: [-17.765497, -63.200004]
+        },
+        {
+          id: "16",
+          name: "8vo Anillo Av.Grigota",
+          location: [-17.811168, -63.207688]
+        },
+        {
+          id: "17",
+          name: "Rotonda del Plan 3000",
+          location: [-17.825286, -63.131620]
+        },
+        {
+          id: "18",
+          name: "C/ Aroma y C/ 6 de Agosto",
+          location: [-17.824240, -63.203795]
+        },
+        {
+          id: "19",
+          name: "C/ Suarez Arana y C/ Quijarro",
+          location: [-17.778782, -63.175357]
+        },
+        {
+          id: "20",
+          name: "C/ Campero entre Mons. Aguire y Suarez Arana",
+          location: [-17.777285, -63.177419]
+        },
+        {
+          id: "21",
+          name: "6to Anillo Av. Virgen de Cotoca",
+          location: [-17.770473, -63.122840]
+        },
+        {
+          id: "22",
+          name: "7mo y 8vo Anillo Av. Alemana",
+          location: [-17.770432, -63.122067]
+        },
+        {
+          id: "23",
+          name: "6to y 7mo Anillo Av. San Martin de Porres",
+          location: [-17.770166, -63.121327]
+        },
+        {
+          id: "24",
+          name: "8km Al Norte Av. Banzer",
+          location: [-17.770034, -63.120881]
+        }
+      ];
+      return markers;
+    }
+
+
+    function toggleHeatmap() {
+      heatmap.setMap(heatmap.getMap() ? null : map);
+    }
+
+    function changeGradient() {
+      var gradient = [
+        'rgba(0, 255, 255, 0)',
+        'rgba(0, 255, 255, 1)',
+        'rgba(0, 191, 255, 1)',
+        'rgba(0, 127, 255, 1)',
+        'rgba(0, 63, 255, 1)',
+        'rgba(0, 0, 255, 1)',
+        'rgba(0, 0, 223, 1)',
+        'rgba(0, 0, 191, 1)',
+        'rgba(0, 0, 159, 1)',
+        'rgba(0, 0, 127, 1)',
+        'rgba(63, 0, 91, 1)',
+        'rgba(127, 0, 63, 1)',
+        'rgba(191, 0, 31, 1)',
+        'rgba(255, 0, 0, 1)'
+      ]
+      heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+    }
+
+    function changeRadius() {
+      heatmap.set('radius', heatmap.get('radius') ? null : 50);
+    }
+
+    function changeOpacity() {
+      heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+    }
+
+    // Datos de los puntos de datos
+    function getPoints() {
+
+      return [
+        {
+          location: new google.maps.LatLng(-17.798611, -63.193137),
+          weight: 1
+        },
+        {
+          location: new google.maps.LatLng(-17.786937, -63.186396),
+          weight: 1
+        },
+        {
+          location: new google.maps.LatLng(-17.798702, -63.193196),
+          weight: 30
+        },
+        {
+          location: new google.maps.LatLng(-17.765923, -63.169284),
+          weight: 2
+        },
+        {
+          location: new google.maps.LatLng(37.782, -122.435),
+          weight: 0.5
+        },
+
+        {
+          location: new google.maps.LatLng(37.785, -122.447),
+          weight: 3
+        },
+        {
+          location: new google.maps.LatLng(37.785, -122.445),
+          weight: 2
+        },
+        new google.maps.LatLng(37.785, -122.443),
+        {
+          location: new google.maps.LatLng(37.785, -122.441),
+          weight: 0.5
+        },
+        new google.maps.LatLng(37.785, -122.439),
+        {
+          location: new google.maps.LatLng(37.785, -122.437),
+          weight: 2
+        },
+        {
+          location: new google.maps.LatLng(37.785, -122.435),
+          weight: 3
+        }
+      ]
+
+    }
+  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVtuegkkcPWXyMVkx20uMRGBIlpf4aeSw&libraries=visualization&callback=initMap">
+  </script>
+</body>
+
+</html>
