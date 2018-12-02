@@ -53,10 +53,10 @@
     <button onclick="changeOpacity()">Change opacity</button>
   </div>
   <div id="map"></div>
-  <script src="https://www.gstatic.com/firebasejs/5.6.0/firebase.js"></script>
-
+  <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-firestore.js"></script>
   <script>
-
+    // Initialize Firebase
     var config = {
       apiKey: "AIzaSyCjUZznnjiGyEV6mF2eRr9v_mGkS0-xPwc",
       authDomain: "innovahack-8eb9e.firebaseapp.com",
@@ -66,28 +66,82 @@
       messagingSenderId: "773939906876"
     };
     firebase.initializeApp(config);
+
+    // Initialize Cloud Firestore through Firebase
+    var db = firebase.firestore();
+    var _CAM1 = 0.5
+    var _CAM2 = 0.5
+    var _CAM8 = 0.5
+
+    // var alovelaceDocumentRef = db.collection('data').doc('info');
+    // console.log(alovelaceDocumentRef)
+
+    db.collection("data").doc("info")
+      .onSnapshot(function (doc) {
+        console.log("Current data: ", doc.data().count);
+        _CAM1 = doc.data().count
+        setInterval(() => {
+          mapaCalor()
+        }, 5000)
+      });
+    db.collection("data").doc("info2")
+      .onSnapshot(function (doc) {
+        console.log("Current data: ", doc.data().count);
+        _CAM2 = doc.data().count
+        setInterval(() => {
+          mapaCalor()
+        }, 5000)
+
+      });
+    db.collection("data").doc("info3")
+      .onSnapshot(function (doc) {
+        console.log("Current data: ", doc.data().count);
+        _CAM8 = doc.data().count
+        setInterval(() => {
+          mapaCalor()
+        }, 5000)
+      });
+    // db.collection("data").get().then((querySnapshot) => {
+    //   querySnapshot.forEach((doc) => {
+    //     console.log(doc.data().date)
+    //     console.log(doc.data().count)
+    //     console.log(doc.data().date)
+    //     console.log(doc.data().idCamera)
+    //     console.log(doc.data().speed)
+    //     _CAM8 = doc.data().count
+    //     console.log(doc)
+
+    //   });
+    // });
+
+
     // This example requires the Visualization library. Include the libraries=visualization
     // parameter when you first load the API. For example:
     // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization">
 
     var map, heatmap;
-    // Inicializar mapas
-    function initMap() {
-      //Creando mapa
-      map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 14,
-        center: {
-          lat: -17.7885815,
-          lng: -63.1843996
-        },
-        mapTypeId: 'satellite'
-      });
-
-      //Visualizando datos que retorna getpoints
+    // Inicializar 
+    function mapaCalor() {
       heatmap = new google.maps.visualization.HeatmapLayer({
         data: getPoints(),
         map: map
       });
+      heatmap.set('radius', heatmap.get('radius') ? null : 30);
+    }
+
+    function initMap() {
+      //Creando mapa
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 16,
+        center: {
+          lat: -17.7885815,
+          lng: -63.1843996
+        },
+        //mapTypeId: 'satellite'
+      });
+
+      //Visualizando datos que retorna getpoints
+
 
       // Marcar las ubicaciones de las camaras con cordenadas
       for (camara of _camaras) {
@@ -102,132 +156,126 @@
     //  Ubicacion de las camaras almacenadas en lista camaras
 
     const _camaras = [
-      {
-        id: "1",
-        name: "1er Anillo Av. Grigota",
-        location: [-17.797752, -63.192382]
-      },
-      {
-        id: "2",
-        name: "1er Anillo Isabela Catolica",
-        location: [-17.786870, -63.186396],
-        area: [
-          [-17.786870, -63.186396],
-          [-17.787000, -63.186500],
-          [-17.786870, -63.186604],
-          []
-        ]
-      },
-      {
-        id: "3",
-        name: "1er y 2do Anillo Av. Grigota entre C/ Muchiri Comercial La Ramada",
-        location: [-17.794651, -63.188825]
-      },
-      {
-        id: "4",
-        name: "2do Anillo Av. Alemana",
-        location: [-17.765923, -63.169284]
-      },
-      {
-        id: "5",
-        name: "2do Anillo Av Paragua",
-        location: [-17.770987, -63.156944]
-      },
-      {
-        id: "6",
-        name: "2 Anillo Av. Cristo Redentor",
-        location: [-17.726056, -63.165863]
-      },
-      {
-        id: "7",
-        name: "2do Anillo Av. Cristo Redentor 2",
-        location: [-17.714787, -63.161407]
-      },
-      {
-        id: "8",
-        name: "2do Anillo Av. Grigota",
-        location: [-17.798365, -63.193055]
-      },
-      {
-        id: "9",
-        name: "2do Anillo Av. Grigota 2",
-        location: [-17.803976, -63.199216]
-      },
-      {
-        id: "10",
-        name: "2do Anillo Av. Roca y Coronado",
-        location: [-17.785602, -63.211362]
-      },
-      {
-        id: "11",
-        name: "2do Anillo Av. Escuadron Velazco",
-        location: [-17.807528, -63.198416]
-      },
-      {
-        id: "12",
-        name: "3er Anillo Interno Av. Banzer",
-        location: [-17.739385, -63.171427]
-      },
-      {
-        id: "13",
-        name: "3er Anillo Interno Av. Pirai",
-        location: [-17.792114, -63.199133]
-      },
-      {
-        id: "14",
-        name: "4to Anillo Av. San Martin",
-        location: [-17.769123, -63.192997]
-      },
-      {
-        id: "15",
-        name: "4to Anillo Av. Banzer",
-        location: [-17.765497, -63.200004]
-      },
-      {
-        id: "16",
-        name: "8vo Anillo Av.Grigota",
-        location: [-17.811168, -63.207688]
-      },
-      {
-        id: "17",
-        name: "Rotonda del Plan 3000",
-        location: [-17.825286, -63.131620]
-      },
-      {
-        id: "18",
-        name: "C/ Aroma y C/ 6 de Agosto",
-        location: [-17.824240, -63.203795]
-      },
-      {
-        id: "19",
-        name: "C/ Suarez Arana y C/ Quijarro",
-        location: [-17.778782, -63.175357]
-      },
-      {
-        id: "20",
-        name: "C/ Campero entre Mons. Aguire y Suarez Arana",
-        location: [-17.777285, -63.177419]
-      },
-      {
-        id: "21",
-        name: "6to Anillo Av. Virgen de Cotoca",
-        location: [-17.770473, -63.122840]
-      },
-      {
-        id: "22",
-        name: "7mo y 8vo Anillo Av. Alemana",
-        location: [-17.770432, -63.122067]
-      },
-      {
-        id: "23",
-        name: "6to y 7mo Anillo Av. San Martin de Porres",
-        location: [-17.770166, -63.121327]
-      },
-      {
-        id: "24",
-        name: "8km Al Norte Av. Banzer",
-        location: [-17.770034, -63.120881]
-      }
+          {
+            id: "1",
+            name: "1er Anillo Av. Grigota",
+            location: [-17.797752, -63.192382]
+          },
+          {
+            id: "2",
+            name: "1er Anillo Isabela Catolica",
+            location: [-17.786870, -63.186396],
+          },
+          {
+            id: "3",
+            name: "1er y 2do Anillo Av. Grigota entre C/ Muchiri Comercial La Ramada",
+            location: [-17.794651, -63.188825]
+          },
+          {
+            id: "4",
+            name: "2do Anillo Av. Alemana",
+            location: [-17.765923, -63.169284]
+          },
+          {
+            id: "5",
+            name: "2do Anillo Av Paragua",
+            location: [-17.770987, -63.156944]
+          },
+          {
+            id: "6",
+            name: "2 Anillo Av. Cristo Redentor",
+            location: [-17.726056, -63.165863]
+          },
+          {
+            id: "7",
+            name: "2do Anillo Av. Cristo Redentor 2",
+            location: [-17.714787, -63.161407]
+          },
+          {
+            id: "8",
+            name: "2do Anillo Av. Grigota",
+            location: [-17.798365, -63.193055]
+          },
+          {
+            id: "9",
+            name: "2do Anillo Av. Grigota 2",
+            location: [-17.803976, -63.199216]
+          },
+          {
+            id: "10",
+            name: "2do Anillo Av. Roca y Coronado",
+            location: [-17.785602, -63.211362]
+          },
+          {
+            id: "11",
+            name: "2do Anillo Av. Escuadron Velazco",
+            location: [-17.807528, -63.198416]
+          },
+          {
+            id: "12",
+            name: "3er Anillo Interno Av. Banzer",
+            location: [-17.739385, -63.171427]
+          },
+          {
+            id: "13",
+            name: "3er Anillo Interno Av. Pirai",
+            location: [-17.792114, -63.199133]
+          },
+          {
+            id: "14",
+            name: "4to Anillo Av. San Martin",
+            location: [-17.769123, -63.192997]
+          },
+          {
+            id: "15",
+            name: "4to Anillo Av. Banzer",
+            location: [-17.765497, -63.200004]
+          },
+          {
+            id: "16",
+            name: "8vo Anillo Av.Grigota",
+            location: [-17.811168, -63.207688]
+          },
+          {
+            id: "17",
+            name: "Rotonda del Plan 3000",
+            location: [-17.825286, -63.131620]
+          },
+          {
+            id: "18",
+            name: "C/ Aroma y C/ 6 de Agosto",
+            location: [-17.824240, -63.203795]
+          },
+          {
+            id: "19",
+            name: "C/ Suarez Arana y C/ Quijarro",
+            location: [-17.778782, -63.175357]
+          },
+          {
+            id: "20",
+            name: "C/ Campero entre Mons. Aguire y Suarez Arana",
+            location: [-17.777285, -63.177419]
+          },
+          {
+            id: "21",
+            name: "6to Anillo Av. Virgen de Cotoca",
+            location: [-17.770473, -63.122840]
+          },
+          {
+            id: "22",
+            name: "7mo y 8vo Anillo Av. Alemana",
+            location: [-17.770432, -63.122067]
+          },
+          {
+            id: "23",
+            name: "6to y 7mo Anillo Av. San Martin de Porres",
+            location: [-17.770166, -63.121327]
+          },
+          {
+            id: "24",
+            name: "8km Al Norte Av. Banzer",
+            location: [-17.770034, -63.120881]
+          }
     ];
 
     function toggleHeatmap() {
@@ -370,8 +418,6 @@
       ]
 
     }
-  
-  
   </script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVtuegkkcPWXyMVkx20uMRGBIlpf4aeSw&libraries=visualization&callback=initMap">
   </script>
