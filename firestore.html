@@ -2,9 +2,9 @@
 <html>
   <head>
         <style>
-            /*/    .page-content { 
+                .map { 
     display: none; 
-}*/
+}
                 </style>
   <style>
       /* Always set the map height explicitly to define the size of the div
@@ -79,26 +79,29 @@ var _CAM1 = 0.5
       .onSnapshot(function (doc) {
         console.log("Current data: ", doc.data().count);
         _CAM1 = doc.data().count
-        setInterval(() => {
-          mapaCalor()
-        }, 5000)
+       // setInterval(() => {
+        //  mapaCalor()
+        //}, 5000)
+        mapaCalor()
       });
     db.collection("data").doc("info2")
       .onSnapshot(function (doc) {
         console.log("Current data: ", doc.data().count);
         _CAM2 = doc.data().count
-        setInterval(() => {
-          mapaCalor()
-        }, 5000)
+        //setInterval(() => {
+         // mapaCalor()
+      //  }, 5000)
+      mapaCalor()
 
       });
     db.collection("data").doc("info3")
       .onSnapshot(function (doc) {
         console.log("Current data: ", doc.data().count);
         _CAM8 = doc.data().count
-        setInterval(() => {
-          mapaCalor()
-        }, 5000)
+        //setInterval(() => {
+        //  mapaCalor()
+       // }, 5000)
+       mapaCalor()
       });
 
       var map, heatmap;
@@ -114,7 +117,7 @@ var _CAM1 = 0.5
     function initMap() {
       //Creando mapa
       map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
+        zoom: 14,
         center: {
           lat: -17.7885815,
           lng: -63.1843996
@@ -458,15 +461,15 @@ document.getElementById("idCameratext3").innerHTML = idCamera3;
   <body>
       
         <script>
-         //       $(function(){
-               //         $('.page-content').fadeIn(3000);
+                $(function(){
+                        $('.map').fadeIn(3000);
                         
-                  //      setTimeout(function(){
-                      //      $('.page-content').fadeOut(3000, function(){
-                          //      location.reload(true);
-                        //    });
-                       // }, 15000);
-                  //  });
+                        setTimeout(function(){
+                            $('.map').fadeOut(3000, function(){
+                                location.reload(true);
+                            });
+                        }, 15000);
+                    });
                     
                 </script>
                  
@@ -513,53 +516,13 @@ document.getElementById("idCameratext3").innerHTML = idCamera3;
 
 <div class="mdl-grid">
     <div class="mdl-cell mdl-cell--6-col">
-        <div id="map">
+        <div id="map" class="map">
 
           
 
         </div>
     </div>
     <div class="mdl-cell mdl-cell--6-col">
-        <canvas id="myChart" width="400" height="250"></canvas>
-        <script>
-        var ctx = document.getElementById("myChart").getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-        });
-        </script>
         <div class="mdl-grid">
   
             <div class="mdl-cell mdl-cell--4-col">
