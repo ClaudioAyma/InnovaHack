@@ -2,18 +2,57 @@
 <html>
   <head>
         <style>
-                .page-content {
-    display: none;
-}
+            /*/    .page-content { 
+    display: none; 
+}*/
                 </style>
-
+  <style>
+      /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+      #map {
+        height: calc(100vh - 100px) ;
+      }
+  
+      /* Optional: Makes the sample page fill the window. */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+  
+      #floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto', 'sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+  
+      #floating-panel {
+        background-color: #fff;
+        border: 1px solid #999;
+        left: 25%;
+        padding: 5px;
+        position: absolute;
+        top: 10px;
+        z-index: 5;
+      }
+    </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.red-blue.min.css" />
+<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-blue.min.css" /> 
 <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-firestore.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
 <script
   src="https://code.jquery.com/jquery-2.2.4.min.js"
   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
@@ -32,7 +71,335 @@
 
   // Initialize Cloud Firestore through Firebase
 var db = firebase.firestore();
+var _CAM1 = 0.5
+    var _CAM2 = 0.5
+    var _CAM8 = 0.5
 
+      db.collection("data").doc("info")
+      .onSnapshot(function (doc) {
+        console.log("Current data: ", doc.data().count);
+        _CAM1 = doc.data().count
+        setInterval(() => {
+          mapaCalor()
+        }, 5000)
+      });
+    db.collection("data").doc("info2")
+      .onSnapshot(function (doc) {
+        console.log("Current data: ", doc.data().count);
+        _CAM2 = doc.data().count
+        setInterval(() => {
+          mapaCalor()
+        }, 5000)
+
+      });
+    db.collection("data").doc("info3")
+      .onSnapshot(function (doc) {
+        console.log("Current data: ", doc.data().count);
+        _CAM8 = doc.data().count
+        setInterval(() => {
+          mapaCalor()
+        }, 5000)
+      });
+
+      var map, heatmap;
+    // Inicializar 
+    function mapaCalor() {
+      heatmap = new google.maps.visualization.HeatmapLayer({
+        data: getPoints(),
+        map: map
+      });
+      heatmap.set('radius', heatmap.get('radius') ? null : 30);
+    }
+
+    function initMap() {
+      //Creando mapa
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 16,
+        center: {
+          lat: -17.7885815,
+          lng: -63.1843996
+        },
+        //mapTypeId: 'satellite'
+      });
+
+      //Visualizando datos que retorna getpoints
+
+
+      // Marcar las ubicaciones de las camaras con cordenadas
+      for (camara of _camaras) {
+        let marker = new google.maps.Marker({
+          map: map,
+          position: new google.maps.LatLng(camara.location[0], camara.location[1]),
+          title: camara.name
+        })
+      }
+    }
+
+    //  Ubicacion de las camaras almacenadas en lista camaras
+
+    const _camaras = [
+          {
+            id: "1",
+            name: "1er Anillo Av. Grigota",
+            location: [-17.797752, -63.192382]
+          },
+          {
+            id: "2",
+            name: "1er Anillo Isabela Catolica",
+            location: [-17.786870, -63.186396],
+          },
+          {
+            id: "3",
+            name: "1er y 2do Anillo Av. Grigota entre C/ Muchiri Comercial La Ramada",
+            location: [-17.794651, -63.188825]
+          },
+          {
+            id: "4",
+            name: "2do Anillo Av. Alemana",
+            location: [-17.765923, -63.169284]
+          },
+          {
+            id: "5",
+            name: "2do Anillo Av Paragua",
+            location: [-17.770987, -63.156944]
+          },
+          {
+            id: "6",
+            name: "2 Anillo Av. Cristo Redentor",
+            location: [-17.726056, -63.165863]
+          },
+          {
+            id: "7",
+            name: "2do Anillo Av. Cristo Redentor 2",
+            location: [-17.714787, -63.161407]
+          },
+          {
+            id: "8",
+            name: "2do Anillo Av. Grigota",
+            location: [-17.798365, -63.193055]
+          },
+          {
+            id: "9",
+            name: "2do Anillo Av. Grigota 2",
+            location: [-17.803976, -63.199216]
+          },
+          {
+            id: "10",
+            name: "2do Anillo Av. Roca y Coronado",
+            location: [-17.785602, -63.211362]
+          },
+          {
+            id: "11",
+            name: "2do Anillo Av. Escuadron Velazco",
+            location: [-17.807528, -63.198416]
+          },
+          {
+            id: "12",
+            name: "3er Anillo Interno Av. Banzer",
+            location: [-17.739385, -63.171427]
+          },
+          {
+            id: "13",
+            name: "3er Anillo Interno Av. Pirai",
+            location: [-17.792114, -63.199133]
+          },
+          {
+            id: "14",
+            name: "4to Anillo Av. San Martin",
+            location: [-17.769123, -63.192997]
+          },
+          {
+            id: "15",
+            name: "4to Anillo Av. Banzer",
+            location: [-17.765497, -63.200004]
+          },
+          {
+            id: "16",
+            name: "8vo Anillo Av.Grigota",
+            location: [-17.811168, -63.207688]
+          },
+          {
+            id: "17",
+            name: "Rotonda del Plan 3000",
+            location: [-17.825286, -63.131620]
+          },
+          {
+            id: "18",
+            name: "C/ Aroma y C/ 6 de Agosto",
+            location: [-17.824240, -63.203795]
+          },
+          {
+            id: "19",
+            name: "C/ Suarez Arana y C/ Quijarro",
+            location: [-17.778782, -63.175357]
+          },
+          {
+            id: "20",
+            name: "C/ Campero entre Mons. Aguire y Suarez Arana",
+            location: [-17.777285, -63.177419]
+          },
+          {
+            id: "21",
+            name: "6to Anillo Av. Virgen de Cotoca",
+            location: [-17.770473, -63.122840]
+          },
+          {
+            id: "22",
+            name: "7mo y 8vo Anillo Av. Alemana",
+            location: [-17.770432, -63.122067]
+          },
+          {
+            id: "23",
+            name: "6to y 7mo Anillo Av. San Martin de Porres",
+            location: [-17.770166, -63.121327]
+          },
+          {
+            id: "24",
+            name: "8km Al Norte Av. Banzer",
+            location: [-17.770034, -63.120881]
+          }
+    ];
+
+    function toggleHeatmap() {
+      heatmap.setMap(heatmap.getMap() ? null : map);
+    }
+
+    function changeGradient() {
+      var gradient = [
+        'rgba(0, 255, 255, 0)',
+        'rgba(0, 255, 255, 1)',
+        'rgba(0, 191, 255, 1)',
+        'rgba(0, 127, 255, 1)',
+        'rgba(0, 63, 255, 1)',
+        'rgba(0, 0, 255, 1)',
+        'rgba(0, 0, 223, 1)',
+        'rgba(0, 0, 191, 1)',
+        'rgba(0, 0, 159, 1)',
+        'rgba(0, 0, 127, 1)',
+        'rgba(63, 0, 91, 1)',
+        'rgba(127, 0, 63, 1)',
+        'rgba(191, 0, 31, 1)',
+        'rgba(255, 0, 0, 1)'
+      ]
+      heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+    }
+
+    function changeRadius() {
+      heatmap.set('radius', heatmap.get('radius') ? null : 30);
+    }
+
+    function changeOpacity() {
+      heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+    }
+
+    // Datos de los puntos de datos
+    function getPoints() {
+      return [{ // camara 1
+          location: new google.maps.LatLng(-17.797752, -63.192382),
+          weight: _CAM1
+        },
+        {
+          location: new google.maps.LatLng(-17.797389, -63.191963),
+          weight: _CAM1
+        },
+        {
+          location: new google.maps.LatLng(-17.797026, -63.191544),
+          weight: _CAM1
+        },
+        {
+          location: new google.maps.LatLng(-17.796663, -63.191125),
+          weight: _CAM1
+        },
+        {
+          location: new google.maps.LatLng(-17.798115, -63.192801),
+          weight: _CAM1
+        },
+        {
+          location: new google.maps.LatLng(-17.798478, -63.193220),
+          weight: _CAM1
+        },
+        {
+          location: new google.maps.LatLng(-17.798841, -63.193639),
+          weight: _CAM1
+        },
+
+
+
+
+        { // Camara 8
+          location: new google.maps.LatLng(-17.798365, -63.193055),
+          weight: _CAM8
+        },
+        {
+          location: new google.maps.LatLng(-17.798002, -63.192636),
+          weight: _CAM8
+        },
+        {
+          location: new google.maps.LatLng(-17.797639, -63.192217),
+          weight: _CAM8
+        },
+        {
+          location: new google.maps.LatLng(-17.797276, -63.191798),
+          weight: _CAM8
+        },
+        {
+          location: new google.maps.LatLng(-17.798728, -63.193474),
+          weight: _CAM8
+        },
+        {
+          location: new google.maps.LatLng(-17.799091, -63.193893),
+          weight: _CAM8
+        },
+        {
+          location: new google.maps.LatLng(-17.799454, -63.194312),
+          weight: _CAM8
+        },
+
+
+        { //camara 2
+          location: new google.maps.LatLng(-17.786870, -63.186396),
+          weight: _CAM2
+        },
+        {
+          location: new google.maps.LatLng(-17.787000, -63.186500),
+          weight: _CAM2
+        },
+        {
+          location: new google.maps.LatLng(-17.787130, -63.186604),
+          weight: _CAM2
+        },
+        {
+          location: new google.maps.LatLng(-17.787260, -63.186708),
+          weight: _CAM2
+        },
+        {
+          location: new google.maps.LatLng(-17.786740, -63.186292),
+          weight: _CAM2
+        },
+        {
+          location: new google.maps.LatLng(-17.786610, -63.186188),
+          weight: _CAM2
+        },
+        {
+          location: new google.maps.LatLng(-17786480, -63.186084),
+          weight: _CAM2
+        },
+
+
+
+
+
+        // {
+        //   location: new google.maps.LatLng(-17.798702, -63.193196),
+        //   weight: 1
+        // },
+        // {
+        //   location: new google.maps.LatLng(-17.765923, -63.169284),
+        //   weight: 2
+        // }
+      ]
+
+    }
 db.collection("data").where("idCamera", "==", "1").get().then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
 
@@ -67,6 +434,20 @@ document.getElementById("idCameratext2").innerHTML = idCamera2;
     });
 });
 
+db.collection("data").where("idCamera", "==", 3).get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+
+const born3 = `${doc.data().date}`;
+const count3 = `${doc.data().count}`;
+const idCamera3= `${doc.data().idCamera}`;
+const speed3= `${doc.data().speed}`;
+
+document.getElementById("borntext3").innerHTML = born3;
+document.getElementById("counttext3").innerHTML = count3;
+document.getElementById("speedtext3").innerHTML = speed3;
+document.getElementById("idCameratext3").innerHTML = idCamera3;
+    });
+});
 
 
 </script>
@@ -75,19 +456,20 @@ document.getElementById("idCameratext2").innerHTML = idCamera2;
   </head>
 
   <body>
-
+      
         <script>
-                $(function(){
-                        $('.page-content').fadeIn(3000);
+         //       $(function(){
+               //         $('.page-content').fadeIn(3000);
                         
-                        setTimeout(function(){
-                            $('.page-content').fadeOut(3000, function(){
-                                location.reload(true);
-                            });
-                        }, 15000);
-                    });
+                  //      setTimeout(function(){
+                      //      $('.page-content').fadeOut(3000, function(){
+                          //      location.reload(true);
+                        //    });
+                       // }, 15000);
+                  //  });
                     
                 </script>
+                 
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
@@ -106,67 +488,106 @@ document.getElementById("idCameratext2").innerHTML = idCamera2;
   </div>
   <main class="mdl-layout__content">
     <div class="page-content">
-
+       
 
 
 
 <!-- Wide card with share menu button -->
 <style>
         .demo-card-wide.mdl-card {
-          width: 512px;
+          width: 300px;
           
         }
         .demo-card-wide > .mdl-card__title {
           color: rgb(255, 255, 255);
           opacity: 1;
-          height: 176px;
+          height: 350px;
           background: url('https://www.pabloyglesias.com/wp-content/uploads/2017/01/coche-conectado-1200x586.jpg') center / cover;
         }
         .demo-card-wide > .mdl-card__menu {
           color: rgb(255, 255, 255);
         }
-        </style>
-        <div class="mdl-grid">  
-        <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-          <div class="mdl-card__title">
-            <h2 class="mdl-card__title-text">Cámara:<span id="idCameratext"></span> </h2>
-          </div>
-          <div class="mdl-card__supporting-text">
-                <p>
-                        Vehiculos: <span id="counttext"></span>
-                </p>
-                    <p>
-                        Hora: <span id="borntext"></span>
-                    </p>
-                    <p>
-                            Velocidad: <span id="speedtext"></span>
-                    </p>
-          </div>
+</style>
+
+
+
+<div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--6-col">
+        <div id="map">
+
+          
 
         </div>
-     
-        
-        <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-
-                <div class="mdl-card__title">
-                  <h2 class="mdl-card__title-text">Cámara:<span id="idCameratext2"></span> </h2>
+    </div>
+    <div class="mdl-cell mdl-cell--6-col">
+        <canvas id="myChart" width="400" height="250"></canvas>
+        <script>
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+        </script>
+        <div class="mdl-grid">
+  
+            <div class="mdl-cell mdl-cell--4-col">
+          
+              <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                <div class="mdl-card__title" >
+                  <h2 class="mdl-card__title-text">Cámara:<span id="idCameratext"></span> </h2>
                 </div>
                 <div class="mdl-card__supporting-text">
                       <p>
-                              Vehiculos: <span id="counttext2"></span>
+                              Vehiculos: <span id="counttext"></span>
                       </p>
                           <p>
-                              Hora: <span id="borntext2"></span>
+                              Hora: <span id="borntext"></span>
                           </p>
                           <p>
-                                  Velocidad: <span id="speedtext2"></span>
+                                  Velocidad: <span id="speedtext"></span>
                           </p>
                 </div>
-      
+          
               </div>
-              <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-
-                    <div class="mdl-card__title">
+          
+            </div>
+            <div class="mdl-cell mdl-cell--4-col">
+          
+                <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+          
+                    <div class="mdl-card__title" style="background: url('https://www.pabloyglesias.com/wp-content/uploads/2015/02/HUD-1024x500.jpg') center / cover;">
                       <h2 class="mdl-card__title-text">Cámara:<span id="idCameratext2"></span> </h2>
                     </div>
                     <div class="mdl-card__supporting-text">
@@ -182,26 +603,45 @@ document.getElementById("idCameratext2").innerHTML = idCamera2;
                     </div>
           
                   </div>
+          
             </div>
+            <div class="mdl-cell mdl-cell--4-col">
+          
+                <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+          
+                    <div class="mdl-card__title" style="background: url('https://www.m.fundssociety.com/sites/default/files/styles/content_detail/public/opinion/safety.jpg?itok=SnR2ZncM') center / cover;">
+                      <h2 class="mdl-card__title-text">Cámara:<span id="idCameratext3"></span> </h2>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                          <p>
+                                  Vehiculos: <span id="counttext3"></span>
+                          </p>
+                              <p>
+                                  Hora: <span id="borntext3"></span>
+                              </p>
+                              <p>
+                                      Velocidad: <span id="speedtext3"></span>
+                              </p>
+                    </div>
+          
+                  </div>
+          
+            </div>
+            
+          </div>
+
+    </div>
+    
+  </div>
 
 
-
-
-
-
-
-       
-
-
-
-                
-
-
+            </div>
 
     </div>
   </main>
 </div>
-     
+     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVtuegkkcPWXyMVkx20uMRGBIlpf4aeSw&libraries=visualization&callback=initMap">
+  </script>
   </body>
 
 </html>
