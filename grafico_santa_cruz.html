@@ -69,66 +69,260 @@
 
     // Initialize Cloud Firestore through Firebase
     var db = firebase.firestore();
-    var _CAM1 = 0.5
-    var _CAM2 = 0.5
-    var _CAM8 = 0.5
 
-    // var alovelaceDocumentRef = db.collection('data').doc('info');
-    // console.log(alovelaceDocumentRef)
+    const _camaras = [
+      {
+        id: "1",
+        name: "1er Anillo Av. Grigota",
+        location: [-17.797752, -63.192382],
+        population: 2,
+        loc: {
+          lat: -17.797752,
+          lng: -63.192382
+        }
+      },
+      {
+        id: "2",
+        name: "1er Anillo Isabela Catolica",
+        location: [-17.786870, -63.186396],
+        population: 2,
+        loc: {
+          lat: -17.786870,
+          lng: -63.186396
+        }
+      },
+      {
+        id: "3",
+        name: "1er y 2do Anillo Av. Grigota entre C/ Muchiri Comercial La Ramada",
+        location: [-17.794651, -63.188825],
+        population: 2,
+        loc: {
+          lat: -17.794651,
+          lng: -63.188825
+        }
+      },
+      {
+        id: "4",
+        name: "2do Anillo Av. Alemana",
+        location: [-17.765923, -63.169284],
+        population: 2,
+        loc: {
+          lat: -17.765923,
+          lng: -63.169284
+        }
+      },
+      {
+        id: "5",
+        name: "2do Anillo Av Paragua",
+        location: [-17.770987, -63.156944],
+        population: 2,
+        loc: {
+          lat: -17.770987,
+          lng: -63.156944
+        }
+      },
+      {
+        id: "6",
+        name: "2 Anillo Av. Cristo Redentor",
+        location: [-17.726056, -63.165863],
+        population: 2,
+        loc: {
+          lat: -17.726056,
+          lng: -63.165863
+        }
+      },
+      {
+        id: "7",
+        name: "2do Anillo Av. Cristo Redentor 2",
+        location: [-17.714787, -63.161407],
+        population: 2,
+        loc: {
+          lat: -17.714787,
+          lng: -63.161407
+        }
+      },
+      {
+        id: "8",
+        name: "2do Anillo Av. Grigota",
+        location: [-17.798365, -63.193055],
+        population: 2,
+        loc: {
+          lat: -17.798365,
+          lng: -63.193055
+        }
+      },
+      {
+        id: "9",
+        name: "2do Anillo Av. Grigota 2",
+        location: [-17.803976, -63.199216],
+        population: 2,
+        loc: {
+          lat: -17.803976,
+          lng: -63.199216
+        }
+      },
+      {
+        id: "10",
+        name: "2do Anillo Av. Roca y Coronado",
+        location: [-17.785602, -63.211362],
+        population: 2,
+        loc: {
+          lat: -17.785602,
+          lng: -63.211362
+        }
+      },
+      {
+        id: "11",
+        name: "2do Anillo Av. Escuadron Velazco",
+        location: [-17.807528, -63.198416],
+        population: 2,
+        loc: {
+          lat: -17.807528,
+          lng: -63.198416
+        }
+      },
+      {
+        id: "12",
+        name: "3er Anillo Interno Av. Banzer",
+        location: [-17.739385, -63.171427],
+        population: 2,
+        loc: {
+          lat: -17.739385,
+          lng: -63.171427
+        }
+      },
+      {
+        id: "13",
+        name: "3er Anillo Interno Av. Pirai",
+        location: [-17.792114, -63.199133],
+        population: 2,
+        loc: {
+          lat: -17.792114,
+          lng: -63.199133
+        }
+      },
+      {
+        id: "14",
+        name: "4to Anillo Av. San Martin",
+        location: [-17.769123, -63.192997],
+        population: 2,
+        loc: {
+          lat: -17.769123,
+          lng: -63.192997
+        }
+      },
+      {
+        id: "15",
+        name: "4to Anillo Av. Banzer",
+        location: [-17.765497, -63.200004],
+        population: 2,
+        loc: {
+          lat: -17.765497,
+          lng: -63.200004
+        }
+      },
+      {
+        id: "16",
+        name: "8vo Anillo Av.Grigota",
+        location: [-17.811168, -63.207688],
+        population: 2,
+        loc: {
+          lat: -17.811168,
+          lng: -63.207688
+        }
+      },
+      {
+        id: "17",
+        name: "Rotonda del Plan 3000",
+        location: [-17.825286, -63.131620],
+        population: 2,
+        loc: {
+          lat: -17.825286,
+          lng: -63.131620
+        }
+      },
+      {
+        id: "18",
+        name: "C/ Aroma y C/ 6 de Agosto",
+        location: [-17.824240, -63.203795],
+        population: 2,
+        loc: {
+          lat: -17.824240,
+          lng: -63.203795
+        }
+      },
+      {
+        id: "19",
+        name: "C/ Suarez Arana y C/ Quijarro",
+        location: [-17.778782, -63.175357],
+        population: 2,
+        loc: {
+          lat: -17.778782,
+          lng: -63.175357
+        }
+      },
+      {
+        id: "20",
+        name: "C/ Campero entre Mons. Aguire y Suarez Arana",
+        location: [-17.777285, -63.177419],
+        population: 2,
+        loc: {
+          lat: -17.777285,
+          lng: -63.177419
+        }
+      },
+      {
+        id: "21",
+        name: "6to Anillo Av. Virgen de Cotoca",
+        location: [-17.770473, -63.122840],
+        population: 2,
+        loc: {
+          lat: -17.770473,
+          lng: -63.122840
+        }
+      },
+      {
+        id: "22",
+        name: "7mo y 8vo Anillo Av. Alemana",
+        location: [-17.770432, -63.122067],
+        population: 2,
+        loc: {
+          lat: -17.770432,
+          lng: -63.122067
+        }
+      },
+      {
+        id: "23",
+        name: "6to y 7mo Anillo Av. San Martin de Porres",
+        location: [-17.770166, -63.121327],
+        population: 2,
+        loc: {
+          lat: -17.770166,
+          lng: -63.121327
+        }
+      },
+      {
+        id: "24",
+        name: "8km Al Norte Av. Banzer",
+        location: [-17.770034, -63.120881],
+        population: 2,
+        loc: {
+          lat: -17.770034,
+          lng: -63.120881
+        }
+      }
+    ];
 
     db.collection("data").doc("info")
-      .onSnapshot(function (doc) {
-        console.log("Current data: ", doc.data().count);
-        _CAM1 = doc.data().count
-        setInterval(() => {
-          mapaCalor()
-        }, 5000)
-      });
-    db.collection("data").doc("info2")
-      .onSnapshot(function (doc) {
-        console.log("Current data: ", doc.data().count);
-        _CAM2 = doc.data().count
-        setInterval(() => {
-          mapaCalor()
-        }, 5000)
+        .onSnapshot(function (doc) {
+          console.log("Current data: ", doc.data().count);
+          let result = validate(doc.data().count)
+          setInterval(() => {
+            mapaCalor()
+          }, 5000)
+        });
 
-      });
-    db.collection("data").doc("info3")
-      .onSnapshot(function (doc) {
-        console.log("Current data: ", doc.data().count);
-        _CAM8 = doc.data().count
-        setInterval(() => {
-          mapaCalor()
-        }, 5000)
-      });
-    // db.collection("data").get().then((querySnapshot) => {
-    //   querySnapshot.forEach((doc) => {
-    //     console.log(doc.data().date)
-    //     console.log(doc.data().count)
-    //     console.log(doc.data().date)
-    //     console.log(doc.data().idCamera)
-    //     console.log(doc.data().speed)
-    //     _CAM8 = doc.data().count
-    //     console.log(doc)
-
-    //   });
-    // });
-
-
-    // This example requires the Visualization library. Include the libraries=visualization
-    // parameter when you first load the API. For example:
-    // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization">
-
-    var map, heatmap;
-    // Inicializar 
-    function mapaCalor() {
-      heatmap = new google.maps.visualization.HeatmapLayer({
-        data: getPoints(),
-        map: map
-      });
-      heatmap.set('radius', heatmap.get('radius') ? null : 30);
-    }
-
+    var map
     function initMap() {
       //Creando mapa
       map = new google.maps.Map(document.getElementById('map'), {
@@ -139,284 +333,200 @@
         },
         //mapTypeId: 'satellite'
       });
-
-      //Visualizando datos que retorna getpoints
-
-
-      // Marcar las ubicaciones de las camaras con cordenadas
-      for (camara of _camaras) {
-        let marker = new google.maps.Marker({
+      for (let camara of _camaras) {
+        // Add the circle for this city to the map.
+        let cityCircle = new google.maps.Circle({
+          strokeColor: "rgba(225,0,0,0.5)",
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35,
           map: map,
-          position: new google.maps.LatLng(camara.location[0], camara.location[1]),
-          title: camara.name
-        })
+          center: camara.loc,
+          radius: Math.sqrt(camara.population) * 100
+        });
+        db.collection("data").doc("info")
+          .onSnapshot(function (doc) {
+            console.log("Current data: ", doc.data().count);
+            _CAM1 = doc.data().count
+          });
+
+
+        // Marcar las ubicaciones de las camaras con cordenadas
+        for (camara of _camaras) {
+          let marker = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(camara.location[0], camara.location[1]),
+            title: camara.name
+          })
+        }
+      }
+      
+
+
+
+
+
+
+      function toggleHeatmap() {
+        heatmap.setMap(heatmap.getMap() ? null : map);
+      }
+
+      function changeGradient() {
+        var gradient = [
+          'rgba(0, 255, 255, 0)',
+          'rgba(0, 255, 255, 1)',
+          'rgba(0, 191, 255, 1)',
+          'rgba(0, 127, 255, 1)',
+          'rgba(0, 63, 255, 1)',
+          'rgba(0, 0, 255, 1)',
+          'rgba(0, 0, 223, 1)',
+          'rgba(0, 0, 191, 1)',
+          'rgba(0, 0, 159, 1)',
+          'rgba(0, 0, 127, 1)',
+          'rgba(63, 0, 91, 1)',
+          'rgba(127, 0, 63, 1)',
+          'rgba(191, 0, 31, 1)',
+          'rgba(255, 0, 0, 1)'
+        ]
+        heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+      }
+
+      function changeRadius() {
+        heatmap.set('radius', heatmap.get('radius') ? null : 30);
+      }
+
+      function changeOpacity() {
+        heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+      }
+
+      // Datos de los puntos de datos
+      function getPoints() {
+        return [{ // camara 1
+            location: new google.maps.LatLng(-17.797752, -63.192382),
+            weight: _CAM1
+          },
+          {
+            location: new google.maps.LatLng(-17.797389, -63.191963),
+            weight: _CAM1
+          },
+          {
+            location: new google.maps.LatLng(-17.797026, -63.191544),
+            weight: _CAM1
+          },
+          {
+            location: new google.maps.LatLng(-17.796663, -63.191125),
+            weight: _CAM1
+          },
+          {
+            location: new google.maps.LatLng(-17.798115, -63.192801),
+            weight: _CAM1
+          },
+          {
+            location: new google.maps.LatLng(-17.798478, -63.193220),
+            weight: _CAM1
+          },
+          {
+            location: new google.maps.LatLng(-17.798841, -63.193639),
+            weight: _CAM1
+          },
+
+
+
+
+          { // Camara 8
+            location: new google.maps.LatLng(-17.798365, -63.193055),
+            weight: _CAM8
+          },
+          {
+            location: new google.maps.LatLng(-17.798002, -63.192636),
+            weight: _CAM8
+          },
+          {
+            location: new google.maps.LatLng(-17.797639, -63.192217),
+            weight: _CAM8
+          },
+          {
+            location: new google.maps.LatLng(-17.797276, -63.191798),
+            weight: _CAM8
+          },
+          {
+            location: new google.maps.LatLng(-17.798728, -63.193474),
+            weight: _CAM8
+          },
+          {
+            location: new google.maps.LatLng(-17.799091, -63.193893),
+            weight: _CAM8
+          },
+          {
+            location: new google.maps.LatLng(-17.799454, -63.194312),
+            weight: _CAM8
+          },
+
+
+          { //camara 2
+            location: new google.maps.LatLng(-17.786870, -63.186396),
+            weight: _CAM2
+          },
+          {
+            location: new google.maps.LatLng(-17.787000, -63.186500),
+            weight: _CAM2
+          },
+          {
+            location: new google.maps.LatLng(-17.787130, -63.186604),
+            weight: _CAM2
+          },
+          {
+            location: new google.maps.LatLng(-17.787260, -63.186708),
+            weight: _CAM2
+          },
+          {
+            location: new google.maps.LatLng(-17.786740, -63.186292),
+            weight: _CAM2
+          },
+          {
+            location: new google.maps.LatLng(-17.786610, -63.186188),
+            weight: _CAM2
+          },
+          {
+            location: new google.maps.LatLng(-17786480, -63.186084),
+            weight: _CAM2
+          },
+
+
+
+
+
+          // {
+          //   location: new google.maps.LatLng(-17.798702, -63.193196),
+          //   weight: 1
+          // },
+          // {
+          //   location: new google.maps.LatLng(-17.765923, -63.169284),
+          //   weight: 2
+          // }
+        ]
+
       }
     }
 
-    //  Ubicacion de las camaras almacenadas en lista camaras
-
-    const _camaras = [
-          {
-            id: "1",
-            name: "1er Anillo Av. Grigota",
-            location: [-17.797752, -63.192382]
-          },
-          {
-            id: "2",
-            name: "1er Anillo Isabela Catolica",
-            location: [-17.786870, -63.186396],
-          },
-          {
-            id: "3",
-            name: "1er y 2do Anillo Av. Grigota entre C/ Muchiri Comercial La Ramada",
-            location: [-17.794651, -63.188825]
-          },
-          {
-            id: "4",
-            name: "2do Anillo Av. Alemana",
-            location: [-17.765923, -63.169284]
-          },
-          {
-            id: "5",
-            name: "2do Anillo Av Paragua",
-            location: [-17.770987, -63.156944]
-          },
-          {
-            id: "6",
-            name: "2 Anillo Av. Cristo Redentor",
-            location: [-17.726056, -63.165863]
-          },
-          {
-            id: "7",
-            name: "2do Anillo Av. Cristo Redentor 2",
-            location: [-17.714787, -63.161407]
-          },
-          {
-            id: "8",
-            name: "2do Anillo Av. Grigota",
-            location: [-17.798365, -63.193055]
-          },
-          {
-            id: "9",
-            name: "2do Anillo Av. Grigota 2",
-            location: [-17.803976, -63.199216]
-          },
-          {
-            id: "10",
-            name: "2do Anillo Av. Roca y Coronado",
-            location: [-17.785602, -63.211362]
-          },
-          {
-            id: "11",
-            name: "2do Anillo Av. Escuadron Velazco",
-            location: [-17.807528, -63.198416]
-          },
-          {
-            id: "12",
-            name: "3er Anillo Interno Av. Banzer",
-            location: [-17.739385, -63.171427]
-          },
-          {
-            id: "13",
-            name: "3er Anillo Interno Av. Pirai",
-            location: [-17.792114, -63.199133]
-          },
-          {
-            id: "14",
-            name: "4to Anillo Av. San Martin",
-            location: [-17.769123, -63.192997]
-          },
-          {
-            id: "15",
-            name: "4to Anillo Av. Banzer",
-            location: [-17.765497, -63.200004]
-          },
-          {
-            id: "16",
-            name: "8vo Anillo Av.Grigota",
-            location: [-17.811168, -63.207688]
-          },
-          {
-            id: "17",
-            name: "Rotonda del Plan 3000",
-            location: [-17.825286, -63.131620]
-          },
-          {
-            id: "18",
-            name: "C/ Aroma y C/ 6 de Agosto",
-            location: [-17.824240, -63.203795]
-          },
-          {
-            id: "19",
-            name: "C/ Suarez Arana y C/ Quijarro",
-            location: [-17.778782, -63.175357]
-          },
-          {
-            id: "20",
-            name: "C/ Campero entre Mons. Aguire y Suarez Arana",
-            location: [-17.777285, -63.177419]
-          },
-          {
-            id: "21",
-            name: "6to Anillo Av. Virgen de Cotoca",
-            location: [-17.770473, -63.122840]
-          },
-          {
-            id: "22",
-            name: "7mo y 8vo Anillo Av. Alemana",
-            location: [-17.770432, -63.122067]
-          },
-          {
-            id: "23",
-            name: "6to y 7mo Anillo Av. San Martin de Porres",
-            location: [-17.770166, -63.121327]
-          },
-          {
-            id: "24",
-            name: "8km Al Norte Av. Banzer",
-            location: [-17.770034, -63.120881]
-          }
-    ];
-
-    function toggleHeatmap() {
-      heatmap.setMap(heatmap.getMap() ? null : map);
-    }
-
-    function changeGradient() {
-      var gradient = [
-        'rgba(0, 255, 255, 0)',
-        'rgba(0, 255, 255, 1)',
-        'rgba(0, 191, 255, 1)',
-        'rgba(0, 127, 255, 1)',
-        'rgba(0, 63, 255, 1)',
-        'rgba(0, 0, 255, 1)',
-        'rgba(0, 0, 223, 1)',
-        'rgba(0, 0, 191, 1)',
-        'rgba(0, 0, 159, 1)',
-        'rgba(0, 0, 127, 1)',
-        'rgba(63, 0, 91, 1)',
-        'rgba(127, 0, 63, 1)',
-        'rgba(191, 0, 31, 1)',
-        'rgba(255, 0, 0, 1)'
-      ]
-      heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
-    }
-
-    function changeRadius() {
-      heatmap.set('radius', heatmap.get('radius') ? null : 30);
-    }
-
-    function changeOpacity() {
-      heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
-    }
-
-    // Datos de los puntos de datos
-    function getPoints() {
-      return [{ // camara 1
-          location: new google.maps.LatLng(-17.797752, -63.192382),
-          weight: _CAM1
-        },
-        {
-          location: new google.maps.LatLng(-17.797389, -63.191963),
-          weight: _CAM1
-        },
-        {
-          location: new google.maps.LatLng(-17.797026, -63.191544),
-          weight: _CAM1
-        },
-        {
-          location: new google.maps.LatLng(-17.796663, -63.191125),
-          weight: _CAM1
-        },
-        {
-          location: new google.maps.LatLng(-17.798115, -63.192801),
-          weight: _CAM1
-        },
-        {
-          location: new google.maps.LatLng(-17.798478, -63.193220),
-          weight: _CAM1
-        },
-        {
-          location: new google.maps.LatLng(-17.798841, -63.193639),
-          weight: _CAM1
-        },
-
-
-
-
-        { // Camara 8
-          location: new google.maps.LatLng(-17.798365, -63.193055),
-          weight: _CAM8
-        },
-        {
-          location: new google.maps.LatLng(-17.798002, -63.192636),
-          weight: _CAM8
-        },
-        {
-          location: new google.maps.LatLng(-17.797639, -63.192217),
-          weight: _CAM8
-        },
-        {
-          location: new google.maps.LatLng(-17.797276, -63.191798),
-          weight: _CAM8
-        },
-        {
-          location: new google.maps.LatLng(-17.798728, -63.193474),
-          weight: _CAM8
-        },
-        {
-          location: new google.maps.LatLng(-17.799091, -63.193893),
-          weight: _CAM8
-        },
-        {
-          location: new google.maps.LatLng(-17.799454, -63.194312),
-          weight: _CAM8
-        },
-
-
-        { //camara 2
-          location: new google.maps.LatLng(-17.786870, -63.186396),
-          weight: _CAM2
-        },
-        {
-          location: new google.maps.LatLng(-17.787000, -63.186500),
-          weight: _CAM2
-        },
-        {
-          location: new google.maps.LatLng(-17.787130, -63.186604),
-          weight: _CAM2
-        },
-        {
-          location: new google.maps.LatLng(-17.787260, -63.186708),
-          weight: _CAM2
-        },
-        {
-          location: new google.maps.LatLng(-17.786740, -63.186292),
-          weight: _CAM2
-        },
-        {
-          location: new google.maps.LatLng(-17.786610, -63.186188),
-          weight: _CAM2
-        },
-        {
-          location: new google.maps.LatLng(-17786480, -63.186084),
-          weight: _CAM2
-        },
-
-
-
-
-
-        // {
-        //   location: new google.maps.LatLng(-17.798702, -63.193196),
-        //   weight: 1
-        // },
-        // {
-        //   location: new google.maps.LatLng(-17.765923, -63.169284),
-        //   weight: 2
-        // }
-      ]
-
+    function validate(dato){
+      if (dato<=100) {
+        return{
+          color: "rgba(246, 238, 9, 0.53)",
+          radio: 2
+        }
+      }else if(dato<=200){
+        return{
+          color: "rgba(246, 238, 9, 0.53)",
+          radio: 4
+        }
+      }else{
+        return{
+          color: "rgba(225,0,0,0.5)",
+          radio: 6
+        }
+      }
     }
   </script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVtuegkkcPWXyMVkx20uMRGBIlpf4aeSw&libraries=visualization&callback=initMap">
